@@ -1,0 +1,13 @@
+<PAMDataset>
+  <PAMRasterBand band="1">
+    <Description>built_probability_2023</Description>
+    <Metadata>
+      <MDI key="STATISTICS_APPROXIMATE">YES</MDI>
+      <MDI key="STATISTICS_MINIMUM">0.019378291675821</MDI>
+      <MDI key="STATISTICS_MAXIMUM">0.79028019681573</MDI>
+      <MDI key="STATISTICS_MEAN">0.13882157608993</MDI>
+      <MDI key="STATISTICS_STDDEV">0.1817269107126</MDI>
+      <MDI key="STATISTICS_VALID_PERCENT">34.91</MDI>
+    </Metadata>
+  </PAMRasterBand>
+</PAMDataset>

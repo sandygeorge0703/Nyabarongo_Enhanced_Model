@@ -383,6 +383,14 @@ ASALocalRun/
 *.tif.xml
 *.xml
 
+# Keep project raster outputs in Git (large rasters use Git LFS)
+!03_NDVI/
+!03_NDVI/**
+!04_ISP_Built/
+!04_ISP_Built/**
+!05_Wetlands/
+!05_Wetlands/**
+
 # Ignore Python/Jupyter temporary artifacts
 __pycache__/
 .ipynb_checkpoints/

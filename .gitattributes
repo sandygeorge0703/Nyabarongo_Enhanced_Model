@@ -1,0 +1,2 @@
+03_NDVI/*.tif filter=lfs diff=lfs merge=lfs -text
+04_ISP_Built/*.tif filter=lfs diff=lfs merge=lfs -text
