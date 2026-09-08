@@ -530,12 +530,13 @@ The baseline experiment was first recreated to confirm that the original modelli
 
 The following experiments were then performed.
 
-| Experiment       | Description                                                         | Purpose                                                                                             |
-| ---------------- | ------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
-| **Baseline**     | Original flood-conditioning variables                               | Reproduced the original model and provided the reference result                                     |
-| **Experiment 1** | Replaced `CN` with `BuiltPct`                                       | Tested whether built-up percentage could replace the existing curve-number representation           |
-| **Experiment 2** | Retained `CN` and added `BuiltPct`                                  | Tested whether built-up information added predictive information beyond CN                          |
-| **Experiment 3** | Retained `CN` and added `BuiltPct`, `NDVI_Change`, and `WetDeclPct` | Tested the effect of integrating the full set of new human-impact and land-surface-change variables |
+| Experiment       | Description                                                                    | Purpose                                                                                                      |
+| ---------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------ |
+| **Baseline**     | Original flood-conditioning variables                                          | Reproduced the original model and provided the reference result                                              |
+| **Experiment 1** | Replaced `CN` with `BuiltPct`                                                   | Tested whether built-up percentage could replace the existing Curve Number (`CN`) predictor                  |
+| **Experiment 2** | Retained `CN` and added `BuiltPct`                                              | Tested whether built-up percentage added useful predictive information alongside `CN`                       |
+| **Experiment 3** | Retained `CN` and added `BuiltPct` and `NDVI_Change`                            | Tested whether adding vegetation-change information improved performance beyond `CN` and `BuiltPct`          |
+| **Experiment 4** | Retained `CN` and added `BuiltPct`, `NDVI_Change`, and `WetDeclPct`             | Tested the full integration of built-up development, vegetation change, and wetness decline in the model     |
 
 
 The experiments were designed incrementally so that changes in model performance could be associated with specific additions to the predictor set rather than changing all variables simultaneously.
@@ -580,3 +581,185 @@ Original study-area grid and flood sample points
 
 The overall purpose of this workflow was to extend the original flood-susceptibility model with interpretable Earth-observation indicators while preserving consistency between the training data and the full catchment prediction grid.
 
+---
+
+# Model Experiment Results
+
+## Overview
+
+Four enhanced-model experiments were compared against the original baseline model. All experiments were evaluated using the same held-out test set of **61 sample locations**, consisting of:
+
+- **30 non-flooded locations**
+- **31 flooded locations**
+
+Model performance was assessed using **precision**, **recall**, **F1-score**, **overall accuracy**, and **Cohen's Kappa coefficient**.
+
+Cohen's Kappa was included because it measured agreement between the predicted and observed flood classes while accounting for agreement that could have occurred by chance. Higher values indicated stronger agreement.
+
+---
+
+## Summary of Experiments
+
+| Model | Predictor modification | Accuracy | Flooded Precision | Flooded Recall | Flooded F1 | Cohen's Kappa |
+|---|---|---:|---:|---:|---:|---:|
+| **Baseline** | Original predictor set | **0.92** | 0.96 | 0.87 | 0.92 | **0.8363** |
+| **Experiment 1** | Replaced `CN` with `BuiltPct` | **0.92** | 0.96 | 0.87 | 0.92 | **0.8363** |
+| **Experiment 2** | Retained `CN` and added `BuiltPct` | **0.97** | 0.97 | 0.97 | 0.97 | **0.9344** |
+| **Experiment 3** | Retained `CN` and added `BuiltPct` + `NDVI_Change` | **0.95** | 0.97 | 0.94 | 0.95 | **0.9017** |
+| **Experiment 4** | Retained `CN` and added `BuiltPct` + `NDVI_Change` + `WetDeclPct` | **0.95** | 0.97 | 0.94 | 0.95 | **0.9017** |
+
+---
+
+# Baseline Experiment
+
+The baseline experiment reproduced the original flood-susceptibility model using the original flood-conditioning variables.
+
+The model achieved an overall accuracy of **92%**.
+
+| Class | Precision | Recall | F1-score | Support |
+|---|---:|---:|---:|---:|
+| Not Flooded | 0.88 | 0.97 | 0.92 | 30 |
+| Flooded | 0.96 | 0.87 | 0.92 | 31 |
+| **Overall Accuracy** |  |  | **0.92** | **61** |
+| Macro Average | 0.92 | 0.92 | 0.92 | 61 |
+| Weighted Average | 0.92 | 0.92 | 0.92 | 61 |
+
+**Cohen's Kappa:** `0.8363`
+
+The baseline therefore provided a strong reference model against which the additional Earth-observation variables could be evaluated.
+
+---
+
+# Experiment 1 — Replacing CN with BuiltPct
+
+Experiment 1 tested whether the newly derived built-up percentage variable could replace the existing Curve Number (`CN`) predictor.
+
+The model used `BuiltPct` in place of `CN`.
+
+| Class | Precision | Recall | F1-score | Support |
+|---|---:|---:|---:|---:|
+| Not Flooded | 0.88 | 0.97 | 0.92 | 30 |
+| Flooded | 0.96 | 0.87 | 0.92 | 31 |
+| **Overall Accuracy** |  |  | **0.92** | **61** |
+| Macro Average | 0.92 | 0.92 | 0.92 | 61 |
+| Weighted Average | 0.92 | 0.92 | 0.92 | 61 |
+
+**Cohen's Kappa:** `0.8363`
+
+The results were identical to the baseline model. Replacing `CN` with `BuiltPct` therefore did **not improve or reduce predictive performance** on the test dataset.
+
+This suggested that `BuiltPct` could capture useful information related to development and land cover, but it did not provide a clear advantage when used as a direct replacement for `CN`.
+
+---
+
+# Experiment 2 — Retaining CN and Adding BuiltPct
+
+Experiment 2 retained the original `CN` variable and added `BuiltPct` as an additional predictor.
+
+This experiment produced the strongest performance of all models tested.
+
+| Class | Precision | Recall | F1-score | Support |
+|---|---:|---:|---:|---:|
+| Not Flooded | 0.97 | 0.97 | 0.97 | 30 |
+| Flooded | 0.97 | 0.97 | 0.97 | 31 |
+| **Overall Accuracy** |  |  | **0.97** | **61** |
+| Macro Average | 0.97 | 0.97 | 0.97 | 61 |
+| Weighted Average | 0.97 | 0.97 | 0.97 | 61 |
+
+**Cohen's Kappa:** `0.9344`
+
+Accuracy increased from **92% in the baseline model to 97%**.
+
+Cohen's Kappa also increased from approximately **0.84 to 0.93**, indicating stronger agreement between the predicted and observed flood classes.
+
+The improvement obtained when `BuiltPct` was **added alongside CN**, rather than replacing CN, suggested that the two variables contained complementary information.
+
+`CN` represented runoff-related characteristics associated with land cover and soil conditions, whereas `BuiltPct` provided a more direct indicator of the spatial concentration of built-up land in 2023.
+
+---
+
+# Experiment 3 — Adding BuiltPct and NDVI Change
+
+Experiment 3 retained `CN` and added both:
+
+- `BuiltPct`
+- `NDVI_Change`
+
+The purpose of this experiment was to test whether including recent vegetation change alongside built-up development provided additional predictive information.
+
+| Class | Precision | Recall | F1-score | Support |
+|---|---:|---:|---:|---:|
+| Not Flooded | 0.94 | 0.97 | 0.95 | 30 |
+| Flooded | 0.97 | 0.94 | 0.95 | 31 |
+| **Overall Accuracy** |  |  | **0.95** | **61** |
+| Macro Average | 0.95 | 0.95 | 0.95 | 61 |
+| Weighted Average | 0.95 | 0.95 | 0.95 | 61 |
+
+**Cohen's Kappa:** `0.9017`
+
+The model achieved an accuracy of **95%**.
+
+This remained higher than the **92% baseline accuracy**, but it was slightly lower than the **97% achieved by Experiment 2**.
+
+The result indicated that adding `NDVI_Change` did not further improve test-set performance beyond the model containing `CN` and `BuiltPct`.
+
+This did not necessarily mean that NDVI change was unrelated to flood susceptibility. Instead, its information may have overlapped with other predictors, or its additional contribution may not have been large enough to improve classification within the available sample of 302 observations.
+
+---
+
+# Experiment 4 — Full Enhanced Model
+
+Experiment 4 tested the full set of newly derived Earth-observation variables.
+
+The original `CN` predictor was retained and the following variables were added:
+
+- `BuiltPct`
+- `NDVI_Change`
+- `WetDeclPct`
+
+This represented the most complete integration of built-up development, vegetation change, and wetness decline.
+
+| Class | Precision | Recall | F1-score | Support |
+|---|---:|---:|---:|---:|
+| Not Flooded | 0.94 | 0.97 | 0.95 | 30 |
+| Flooded | 0.97 | 0.94 | 0.95 | 31 |
+| **Overall Accuracy** |  |  | **0.95** | **61** |
+| Macro Average | 0.95 | 0.95 | 0.95 | 61 |
+| Weighted Average | 0.95 | 0.95 | 0.95 | 61 |
+
+**Cohen's Kappa:** `0.9017`
+
+The full enhanced model achieved an accuracy of **95%** and a Cohen's Kappa score of approximately **0.90**.
+
+Performance remained higher than the original baseline model but was slightly below Experiment 2.
+
+Adding `WetDeclPct` did not change the reported classification performance compared with Experiment 3. This suggested that the wetness-decline predictor did not provide sufficient additional discriminatory information to improve classification on this particular test set.
+
+---
+
+# Comparison of Model Performance
+
+The experiments showed that simply adding more predictors did not necessarily produce a better model.
+
+The main pattern was:
+
+```text
+Baseline
+92% accuracy
+Kappa = 0.8363
+        ↓
+Replace CN with BuiltPct
+92% accuracy
+Kappa = 0.8363
+        ↓
+Keep CN + add BuiltPct
+97% accuracy
+Kappa = 0.9344
+        ↓
+Keep CN + BuiltPct + NDVI Change
+95% accuracy
+Kappa = 0.9017
+        ↓
+Keep CN + BuiltPct + NDVI Change + Wetness Decline
+95% accuracy
+Kappa = 0.9017
